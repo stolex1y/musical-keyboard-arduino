@@ -1,3 +1,4 @@
+/*
 #include "Uart.h"
 
 #include <string.h>
@@ -41,7 +42,7 @@ void uartInit() {
     UartHardware.init();
 }
 
-void uartPooling() {
+void uartPolling() {
     if (!interruptionsEnabled) {
         hardwareTransmit();
         hardwareReceive();
@@ -75,7 +76,7 @@ uint8_t uartIsInterruptionEnabled() {
 static void hardwareReceive() {
     if (bufferGetFreeSize(rxBuffer) > 0) {
         uint8_t data = 0;
-        if (UartHardware.receivePolling(&data, 5)) {
+        if (UartHardware.receivePolling(&data, 1)) {
             bufferPush(rxBuffer, data);
         }
     }
@@ -99,7 +100,7 @@ static void hardwareTransmitIT() {
 static void hardwareTransmit() {
     if (bufferHasValues(txBuffer)) {
         const uint8_t byte = bufferPeek(txBuffer);
-        if (UartHardware.transmitPolling(byte, 5))
+        if (UartHardware.transmitPolling(byte, 1))
             bufferPop(txBuffer);
     }
 }
@@ -114,4 +115,4 @@ extern void uartTransmitIntCallback() {
     transmitIntEnd = 1;
     if (interruptionsEnabled)
         hardwareTransmitIT();
-}
+}*/

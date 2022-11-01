@@ -9,7 +9,7 @@ uint8_t uartHasNext();
 void uartEnableInterruption();
 void uartDisableInterruption();
 void uartInit();
-void uartPooling();
+void uartPolling();
 uint8_t uartIsInterruptionEnabled();
 
 static struct UartInterface {
@@ -19,7 +19,7 @@ static struct UartInterface {
     void (*enableInterruption)();
     void (*disableInterruption)();
     void (*init)();
-    void (*pooling)();
+    void (*polling)();
     uint8_t (*isInterruptionEnabled)();
 } const Uart = {
         uartReceive,
@@ -28,7 +28,7 @@ static struct UartInterface {
         uartEnableInterruption,
         uartDisableInterruption,
         uartInit,
-        uartPooling,
+        uartPolling,
         uartIsInterruptionEnabled
 };
 

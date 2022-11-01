@@ -7,7 +7,8 @@ typedef void (*TimerCallback)();
 
 enum TimerN {
     TIM1 = 0,
-    TIM2
+    TIM2,
+    TIM3
 };
 
 void timerStop(TimerN timer);
@@ -20,6 +21,8 @@ void timerSetCallback(TimerN timer, TimerCallback callback);
 
 void timerInvokeCallback(TimerN timer);
 
+void timerTick();
+
 
 static struct {
     void (*stop)(TimerN timer);
@@ -31,12 +34,15 @@ static struct {
     void (*setCallback)(TimerN timer, TimerCallback callback);
 
     void (*invokeCallback)(TimerN timer);
+
+    void (*tick)();
 } const timer = {
         timerStop,
         timerStart,
         timerSetPeriod,
         timerSetCallback,
-        timerInvokeCallback
+        timerInvokeCallback,
+        timerTick,
 };
 
 

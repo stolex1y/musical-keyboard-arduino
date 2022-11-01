@@ -2,6 +2,7 @@
 #define MUSICAL_KEYBOARD_MUSICALKEYBOARD_H
 
 #include <stdint.h>
+#include "hardware/Buffer.h"
 
 enum Note {
     DO = 0,
@@ -14,49 +15,37 @@ enum Note {
 };
 
 void musicalKeyboardInit(uint8_t pin);
-
 void musicalKeyboardNextOctave();
-
 void musicalKeyboardPrevOctave();
-
 void musicalKeyboardPlayNote(Note note);
-
 void musicalKeyboardReduceDuration(uint16_t deltaMs);
-
 void musicalKeyboardIncreaseDuration(uint16_t deltaMs);
-
 void musicalKeyboardPlayCurrentOctave();
-
 uint16_t musicalKeyboardGetCurrentDuration();
-
 uint8_t musicalKeyboardGetCurrentOctave();
-
 uint16_t musicalKeyboardGetCurrentNote();
-
-const uint16_t *musicalKeyboardGetCurrentNotes();
+const uint16_t * musicalKeyboardGetCurrentNotes();
+void musicalKeyboardPoll();
+void musicalKeyboardDebugEnable();
+void musicalKeyboardDebugDisable();
+Buffer * musicalKeyboardGetDebugBuffer();
 
 static struct {
     void (*init)(uint8_t pin);
-
     void (*nextOctave)();
-
     void (*prevOctave)();
-
     void (*playNote)(Note note);
-
     void (*reduceDuration)(uint16_t deltaMs);
-
     void (*increaseDuration)(uint16_t deltaMs);
-
     void (*playCurrentOctave)();
-
+    void (*poll)();
     uint16_t (*currentDuration)();
-
     uint8_t (*currentOctave)();
-
     uint16_t (*currentNote)();
-
     const uint16_t *(*currentNotes)();
+    void (*debugEnable)();
+    void (*debugDisable)();
+    Buffer * (*getDebugBuffer)();
 } const MusicalKeyboard = {
         musicalKeyboardInit,
         musicalKeyboardNextOctave,
@@ -65,11 +54,15 @@ static struct {
         musicalKeyboardReduceDuration,
         musicalKeyboardIncreaseDuration,
         musicalKeyboardPlayCurrentOctave,
+        musicalKeyboardPoll,
 
         musicalKeyboardGetCurrentDuration,
         musicalKeyboardGetCurrentOctave,
         musicalKeyboardGetCurrentNote,
-        musicalKeyboardGetCurrentNotes
+        musicalKeyboardGetCurrentNotes,
+        musicalKeyboardDebugEnable,
+        musicalKeyboardDebugDisable,
+        musicalKeyboardGetDebugBuffer
 };
 
 #endif //MUSICAL_KEYBOARD_MUSICALKEYBOARD_H

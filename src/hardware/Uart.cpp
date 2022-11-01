@@ -1,3 +1,4 @@
+/*
 #include "hardware/Uart.h"
 
 //-------------AVR---------------------
@@ -61,11 +62,15 @@ void uartHardwareTransmitInterrupt(uint8_t buffer) {
     UCSR0B |= DATA_REGISTER_EMPTY_INTERRUPT; // Enables the Interrupt
 }
 
+*/
+/*
 ISR(USART_UDRE_vect) {
     UDR0 = uartHardwareTransmitBuffer;
     UCSR0B &= ~DATA_REGISTER_EMPTY_INTERRUPT;
     uartTransmitIntCallback();
 }
+*//*
+
 
 uint8_t uartHardwareReceivePolling(uint8_t * const data, const uint16_t timeOut) {
     const uint16_t timeStart = millis();
@@ -81,11 +86,13 @@ void uartHardwareReceiveInterrupt() {
     UCSR0B |= RX_COMPLETE_INTERRUPT;
 }
 
-ISR(USART_RX_vect) {
+*/
+/*ISR(USART_RX_vect) {
     uartHardwareReceiveBuffer = UDR0;
     UCSR0B &= ~RX_COMPLETE_INTERRUPT;
     uartReceiveIntCallback(uartHardwareReceiveBuffer);
-}
+}*//*
+
 
 void uartHardwareDisableInterrupts() {
     UCSR0B &= ~RX_COMPLETE_INTERRUPT;
@@ -96,6 +103,7 @@ void uartHardwareDisableInterrupts() {
 
 //-------------STM32-------------------
 
+*/
 /*
 
 
@@ -115,8 +123,10 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
             strcpy(transmitBuffer, "");		}
     }
 }
-*/
+*//*
+
 
 
 //-------------STM32-------------------
 
+*/

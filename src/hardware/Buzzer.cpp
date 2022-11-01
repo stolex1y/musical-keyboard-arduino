@@ -18,29 +18,23 @@ typedef struct {
     uint16_t size;
 } Notes;
 
-static Notes notes = {
-        (BuzzerNote *) malloc(BUZZER_BUF_SIZE * sizeof(BuzzerNote)),
-        0
-};
-
 static struct Buzzer {
     uint8_t pin;
     Notes nextNotesArray;
     uint16_t nextNoteIdx;
-} buzzer = {.pin = 0, .nextNotesArray = notes, .nextNoteIdx = 0};
+} buzzer = { 0 };
 
 static void playNextNote();
 static void stopBuzzer();
 static void playNote(uint16_t freq, uint16_t durationMs);
 
-/*
- * void Buzzer_Set_Freq (uint16_t freq);
-void Buzzer_Set_Volume (uint16_t volume);
- */
-
 void buzzerInit(const uint8_t pin) {
     buzzer.pin = pin;
     buzzer.nextNoteIdx = 0;
+    buzzer.nextNotesArray = {
+            (BuzzerNote *) malloc(BUZZER_BUF_SIZE * sizeof(BuzzerNote)),
+            0
+    };
 }
 
 void buzzerPlayNote(const uint16_t freq, const uint16_t durationMs) {

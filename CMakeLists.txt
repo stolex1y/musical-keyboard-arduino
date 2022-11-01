@@ -30,4 +30,4 @@ add_custom_target(
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_executable(Z_DUMMY_TARGET ${SRC_LIST} src/MusicalKeyboard.cpp include/MusicalKeyboard.h src/hardware/Buzzer.cpp include/hardware/Buzzer.h src/hardware/Timer.cpp include/hardware/Timer.h)
+add_executable(Z_DUMMY_TARGET ${SRC_LIST} src/MusicalKeyboard.cpp include/MusicalKeyboard.h src/hardware/Buzzer.cpp include/hardware/Buzzer.h src/hardware/Timer.cpp include/hardware/Timer.h src/Keyboard.cpp include/Keyboard.h src/hardware/KeyboardControllerI2C.cpp include/hardware/KeyboardControllerI2C.h src/hardware/PinButton.cpp include/hardware/PinButton.h)
