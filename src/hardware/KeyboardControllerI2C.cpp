@@ -13,7 +13,6 @@ uint8_t keyboardControllerReadInput() {
 uint8_t keyboardControllerWriteConfig(uint8_t config) {
     Wire.beginTransmission(RECEIVER_ADDR);
     Wire.write(CONFIG_ADDR);
-//    Wire.endTransmission(false);
     Wire.write(config);
     return Wire.endTransmission();
 }

@@ -8,7 +8,7 @@
 
 #define PRESS_TIME_MS 50
 #define RELEASE_TIME_MS 50
-#define DEBUG_BUF_SIZE 22
+#define DEBUG_BUF_SIZE 25
 
 typedef enum ButtonState {
     RELEASE_START,
@@ -94,7 +94,7 @@ void keyboardButtonUpdateState(KeyboardButton * const keyboardButton, uint8_t is
                 keyboardButton->state = PRESS;
                 if (keyboardButton->debugModeEnabled) {
                     char debugMsg[25];
-                    sprintf(debugMsg, "Button %" PRIu16 " is pressed", keyboardButton->code);
+                    sprintf(debugMsg, "Button %" PRIu16 " is pressed\n", keyboardButton->code);
                     buffer.pushValues(keyboardButton->buffer, (uint8_t *) debugMsg, 25);
                 }
                 if (keyboardButton->clickHandler != NULL) {

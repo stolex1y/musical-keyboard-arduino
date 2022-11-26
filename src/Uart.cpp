@@ -32,8 +32,8 @@ uint16_t uartPrintf(const char *const format, ...) {
     va_list args;
     va_start(args, format);
     char buf[TX_BUFFER_SIZE];
-    sprintf(buf, format, args);
-    return uartPrint(buf);
+    size_t actuallySize = vsnprintf(buf, TX_BUFFER_SIZE, format, args);
+    return uartTransmit((uint8_t *) buf, actuallySize);
 }
 
 uint16_t uartPrint(const char *const msg) {

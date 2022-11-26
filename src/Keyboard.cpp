@@ -6,7 +6,7 @@
 
 #define KB_HEIGHT 4
 #define KB_WIDTH 4
-#define DEBUG_BUF_SIZE 30
+#define DEBUG_BUF_SIZE 50
 
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
@@ -78,21 +78,10 @@ Buffer * keyboardGetDebugBuffer() {
 }
 
 static void updateDebugMessages() {
-//    const uint8_t tempSize = 50;
-//    uint8_t temp[tempSize];
     for (uint8_t i = 0; i < KB_HEIGHT * KB_WIDTH; i++) {
-        KeyboardButton * key = keyboard.keys[i];
-        if (buffer.toBuffer(keyboardButton.getDebugBuffer(key), keyboard.buffer,
-                            buffer.freeSize(keyboard.buffer)) == 0) {
+        if (buffer.freeSize(keyboard.buffer) == 0)
             break;
-        } else {
-            buffer.push(keyboard.buffer, '\n');
-        }
-//        Buffer * keyDebugBuf = keyboardButton.getDebugBuffer(key);
-//        while (buffer.hasValues(keyDebugBuf)) {
-//            uint16_t msgSize = MIN(buffer.size(keyDebugBuf), tempSize);
-//            buffer.popValues(keyDebugBuf, temp, msgSize);
-//            buffer.pushValues(keyboard.buffer, temp, msgSize);
-//        }
+        KeyboardButton * key = keyboard.keys[i];
+        buffer.popToBuffer(keyboardButton.getDebugBuffer(key), keyboard.buffer, buffer.freeSize(keyboard.buffer));
     }
 }

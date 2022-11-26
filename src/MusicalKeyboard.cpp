@@ -12,7 +12,7 @@
 #define DURATION_MIN 100
 #define DURATION_MAX 5000
 
-#define DEBUG_BUF_SIZE 60
+#define DEBUG_BUF_SIZE 50
 
 static const uint16_t notesFreq[] = {
         [DO] = 4186,
