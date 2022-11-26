@@ -1,7 +1,5 @@
-/*
 #include "hardware/Uart.h"
 
-//-------------AVR---------------------
 #include <Arduino.h>
 
 #include <avr/io.h>      // Contains all the I/O Register Macros
@@ -62,14 +60,11 @@ void uartHardwareTransmitInterrupt(uint8_t buffer) {
     UCSR0B |= DATA_REGISTER_EMPTY_INTERRUPT; // Enables the Interrupt
 }
 
-*/
-/*
 ISR(USART_UDRE_vect) {
     UDR0 = uartHardwareTransmitBuffer;
     UCSR0B &= ~DATA_REGISTER_EMPTY_INTERRUPT;
     uartTransmitIntCallback();
 }
-*//*
 
 
 uint8_t uartHardwareReceivePolling(uint8_t * const data, const uint16_t timeOut) {
@@ -86,12 +81,11 @@ void uartHardwareReceiveInterrupt() {
     UCSR0B |= RX_COMPLETE_INTERRUPT;
 }
 
-*/
-/*ISR(USART_RX_vect) {
+ISR(USART_RX_vect) {
     uartHardwareReceiveBuffer = UDR0;
     UCSR0B &= ~RX_COMPLETE_INTERRUPT;
     uartReceiveIntCallback(uartHardwareReceiveBuffer);
-}*//*
+}
 
 
 void uartHardwareDisableInterrupts() {
@@ -99,34 +93,3 @@ void uartHardwareDisableInterrupts() {
     UCSR0B &= ~DATA_REGISTER_EMPTY_INTERRUPT;
 }
 
-//-------------AVR---------------------
-
-//-------------STM32-------------------
-
-*/
-/*
-
-
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-    if (huart == &huart6) {
-        check();
-    }
-}
-
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
-    if (huart == &huart6) {
-        if (strcmp(transmitBuffer, "") != 0) {
-            char buf[needToTransmit];
-            memcpy(buf, transmitBuffer, needToTransmit);
-            HAL_UART_Transmit_IT(&huart6, (uint8_t*) buf, needToTransmit);
-            needToTransmit = 0;
-            strcpy(transmitBuffer, "");		}
-    }
-}
-*//*
-
-
-
-//-------------STM32-------------------
-
-*/

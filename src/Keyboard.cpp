@@ -11,10 +11,10 @@
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 static const KeyboardKeyName keyboardKeysNames[KB_HEIGHT][KB_WIDTH] = {
-        { KEY_1, KEY_2, KEY_3, KEY_A, },
-        { KEY_4, KEY_5, KEY_6, KEY_B, },
-        { KEY_7, KEY_8, KEY_9, KEY_C, },
-        { KEY_ASTERISK, KEY_0, KEY_LATTICE, KEY_D, },
+        { KEY_1,        KEY_2,      KEY_3,       KEY_A,  },
+        { KEY_4,        KEY_5,      KEY_6,       KEY_B,  },
+        { KEY_7,        KEY_8,      KEY_9,       KEY_C,  },
+        { KEY_ASTERISK, KEY_0,      KEY_LATTICE, KEY_D,  },
 };
 
 static struct Keyboard {
@@ -78,15 +78,21 @@ Buffer * keyboardGetDebugBuffer() {
 }
 
 static void updateDebugMessages() {
-    const uint8_t tempSize = 50;
-    uint8_t temp[tempSize];
+//    const uint8_t tempSize = 50;
+//    uint8_t temp[tempSize];
     for (uint8_t i = 0; i < KB_HEIGHT * KB_WIDTH; i++) {
         KeyboardButton * key = keyboard.keys[i];
-        Buffer * keyDebugBuf = keyboardButton.getDebugBuffer(key);
-        while (buffer.hasValues(keyDebugBuf)) {
-            uint16_t msgSize = MIN(buffer.size(keyDebugBuf), tempSize);
-            buffer.popValues(keyDebugBuf, temp, msgSize);
-            buffer.pushValues(keyboard.buffer, temp, msgSize);
+        if (buffer.toBuffer(keyboardButton.getDebugBuffer(key), keyboard.buffer,
+                            buffer.freeSize(keyboard.buffer)) == 0) {
+            break;
+        } else {
+            buffer.push(keyboard.buffer, '\n');
         }
+//        Buffer * keyDebugBuf = keyboardButton.getDebugBuffer(key);
+//        while (buffer.hasValues(keyDebugBuf)) {
+//            uint16_t msgSize = MIN(buffer.size(keyDebugBuf), tempSize);
+//            buffer.popValues(keyDebugBuf, temp, msgSize);
+//            buffer.pushValues(keyboard.buffer, temp, msgSize);
+//        }
     }
 }

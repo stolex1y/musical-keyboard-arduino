@@ -16,6 +16,7 @@ uint16_t bufferPopValues(Buffer *buffer, uint8_t *buf, uint16_t bufSize);
 uint8_t bufferHasValues(const Buffer *buffer);
 uint16_t bufferGetFreeSize(const Buffer *buffer);
 uint16_t bufferPeekValues(const Buffer * buffer, uint8_t **values);
+uint16_t bufferToBuffer(Buffer * const from, Buffer * const to, uint16_t size);
 
 static struct {
     Buffer * (*create)(uint16_t buffSize);
@@ -29,6 +30,7 @@ static struct {
     uint8_t (*hasValues)(const Buffer *buffer);
     uint16_t (*freeSize)(const Buffer *buffer);
     uint16_t (*peekValues)(const Buffer * buffer, uint8_t **values);
+    uint16_t (*toBuffer)(Buffer * const from, Buffer * const to, uint16_t size);
 } const buffer = {
         bufferCreate,
         bufferPush,
@@ -40,7 +42,8 @@ static struct {
         bufferPopValues,
         bufferHasValues,
         bufferGetFreeSize,
-        bufferPeekValues
+        bufferPeekValues,
+        bufferToBuffer
 
 };
 #endif

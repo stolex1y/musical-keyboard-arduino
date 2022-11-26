@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 #include "hardware/Buzzer.h"
-#include "Keyboard.h"
 #include "hardware/Buffer.h"
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
@@ -43,57 +42,22 @@ struct MusicalKeyboard {
     uint16_t debugCurrentNote;
     uint16_t *debugCurrentNotes;
     Buffer *debugBuffer;
-} musicalKeyboard = {0};
+} musicalKeyboard = {
+        .noteDurationMs = 1000,
+        .octave = 5,
+        .debugEnabled = 0
+};
 
 static uint16_t calcNoteFreqByOctave(uint16_t baseFreq, uint8_t octave);
-
-static void key_1_command();
-static void key_2_command();
-static void key_3_command();
-static void key_4_command();
-static void key_5_command();
-static void key_6_command();
-static void key_7_command();
-static void key_A_command();
-static void key_B_command();
-static void key_C_command();
-static void key_D_command();
-static void key_0_command();
 
 static void debugPrintCurrentOctave();
 static void debugPrintCurrentNote();
 static void debugPrintCurrentNotes();
 static void debugPrintCurrentDuration();
-static void getDebugMsgFromKb();
 
 void musicalKeyboardInit(const uint8_t pin) {
     buzzerInit(pin);
-
     musicalKeyboard.debugBuffer = buffer.create(DEBUG_BUF_SIZE);
-
-    Keyboard.init();
-    Keyboard.setKeyPressHandler(KEY_1, key_1_command);
-    Keyboard.setKeyPressHandler(KEY_2, key_2_command);
-    Keyboard.setKeyPressHandler(KEY_3, key_3_command);
-    Keyboard.setKeyPressHandler(KEY_4, key_4_command);
-    Keyboard.setKeyPressHandler(KEY_5, key_5_command);
-    Keyboard.setKeyPressHandler(KEY_6, key_6_command);
-    Keyboard.setKeyPressHandler(KEY_7, key_7_command);
-    Keyboard.setKeyPressHandler(KEY_0, key_0_command);
-    Keyboard.setKeyPressHandler(KEY_A, key_A_command);
-    Keyboard.setKeyPressHandler(KEY_B, key_B_command);
-    Keyboard.setKeyPressHandler(KEY_C, key_C_command);
-    Keyboard.setKeyPressHandler(KEY_D, key_D_command);
-
-    musicalKeyboard.octave = 5;
-    musicalKeyboard.noteDurationMs = 1000;
-}
-
-void musicalKeyboardPoll() {
-    Keyboard.statePolling();
-    if (musicalKeyboard.debugEnabled) {
-        getDebugMsgFromKb();
-    }
 }
 
 void musicalKeyboardNextOctave() {
@@ -172,12 +136,10 @@ const uint16_t * musicalKeyboardGetCurrentNotes() {
 
 void musicalKeyboardDebugEnable() {
     musicalKeyboard.debugEnabled = 1;
-    Keyboard.debugEnable();
 }
 
 void musicalKeyboardDebugDisable() {
     musicalKeyboard.debugEnabled = 0;
-    Keyboard.debugDisable();
     buffer.clear(musicalKeyboard.debugBuffer);
 }
 
@@ -194,54 +156,6 @@ static float calcNoteFreqByOctave(float baseFreq, uint8_t octave) {
     return baseFreq * (1 << (octave - 1));
 }
 */
-
-static void key_1_command() {
-    musicalKeyboardPlayNote(DO);
-}
-
-static void key_2_command() {
-    musicalKeyboardPlayNote(RE);
-}
-
-static void key_3_command() {
-    musicalKeyboardPlayNote(MI);
-}
-
-static void key_4_command() {
-    musicalKeyboardPlayNote(FA);
-}
-
-static void key_5_command() {
-    musicalKeyboardPlayNote(SOL);
-}
-
-static void key_6_command() {
-    musicalKeyboardPlayNote(LA);
-}
-
-static void key_7_command() {
-    musicalKeyboardPlayNote(SI);
-}
-
-static void key_A_command() {
-    musicalKeyboardNextOctave();
-}
-
-static void key_B_command() {
-    musicalKeyboardPrevOctave();
-}
-
-static void key_C_command() {
-    musicalKeyboardIncreaseDuration(100);
-}
-
-static void key_D_command() {
-    musicalKeyboardReduceDuration(100);
-}
-
-static void key_0_command() {
-    musicalKeyboardPlayCurrentOctave();
-}
 
 static void debugPrintCurrentNote() {
     char msg[30];
@@ -274,15 +188,5 @@ static void debugPrintCurrentOctave() {
     char msg[30];
     uint16_t msgSize = sprintf(msg, "Octave: %" PRIu8 "\n", musicalKeyboard.octave);
     buffer.pushValues(musicalKeyboard.debugBuffer, (uint8_t *) msg, msgSize);
-}
-
-static void getDebugMsgFromKb() {
-    const uint8_t tempSize = 50;
-    uint8_t temp[tempSize];
-    uint16_t kbDebugMsgSize = MIN(buffer.size(Keyboard.getDebugBuffer()), tempSize);
-    if (kbDebugMsgSize > 0) {
-        buffer.popValues(Keyboard.getDebugBuffer(), temp, kbDebugMsgSize);
-        buffer.pushValues(musicalKeyboard.debugBuffer, temp, kbDebugMsgSize);
-    }
 }
 

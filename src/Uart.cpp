@@ -1,26 +1,53 @@
-/*
 #include "Uart.h"
 
 #include <string.h>
+#include <stdio.h>
 
 #include "hardware/Buffer.h"
 #include "hardware/Uart.h"
 
-#define TX_BUFFER_SIZE 128
+#define TX_BUFFER_SIZE 64
 #define RX_BUFFER_SIZE 64
 
 static Buffer *txBuffer;
 static Buffer *rxBuffer;
 static volatile uint8_t interruptionsEnabled = 0;
 static volatile uint8_t transmitIntEnd = 1;
+static uint8_t echoMode = 0;
 
 static void hardwareReceive();
-
 static void hardwareReceiveIT();
-
 static void hardwareTransmit();
-
 static void hardwareTransmitIT();
+
+void uartEnableEchoMode() {
+    echoMode = 1;
+}
+
+void uartDisableEchoMode() {
+    echoMode = 0;
+}
+
+uint16_t uartPrintf(const char *const format, ...) {
+    va_list args;
+    va_start(args, format);
+    char buf[TX_BUFFER_SIZE];
+    sprintf(buf, format, args);
+    return uartPrint(buf);
+}
+
+uint16_t uartPrint(const char *const msg) {
+    size_t len = strlen(msg);
+    size_t transmitted = uartTransmit((uint8_t *) msg, (uint16_t) len);
+    return transmitted;
+}
+
+uint16_t uartPrintln(const char *const msg) {
+    size_t len = strlen(msg);
+    size_t transmitted = uartTransmit((uint8_t *) msg, (uint16_t) len);
+    transmitted += uartTransmit((uint8_t *) "\n", 1);
+    return transmitted;
+}
 
 uint16_t uartTransmit(const uint8_t *const msg, const uint16_t msgSize) {
     if (msg == NULL)
@@ -44,8 +71,8 @@ void uartInit() {
 
 void uartPolling() {
     if (!interruptionsEnabled) {
-        hardwareTransmit();
         hardwareReceive();
+        hardwareTransmit();
     }
 }
 
@@ -78,6 +105,8 @@ static void hardwareReceive() {
         uint8_t data = 0;
         if (UartHardware.receivePolling(&data, 1)) {
             bufferPush(rxBuffer, data);
+            if (echoMode)
+                uartTransmit(&data, 1);
         }
     }
 }
@@ -107,6 +136,8 @@ static void hardwareTransmit() {
 
 extern void uartReceiveIntCallback(uint8_t data) {
     bufferPush(rxBuffer, data);
+    if (echoMode)
+        uartTransmit(&data, 1);
     if (interruptionsEnabled)
         hardwareReceiveIT();
 }
@@ -115,4 +146,4 @@ extern void uartTransmitIntCallback() {
     transmitIntEnd = 1;
     if (interruptionsEnabled)
         hardwareTransmitIT();
-}*/
+}

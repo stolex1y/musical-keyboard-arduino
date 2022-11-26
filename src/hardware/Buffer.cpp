@@ -83,8 +83,12 @@ uint16_t bufferPopValues(Buffer * const buffer, uint8_t * const buf, const uint1
     uint16_t popSize = bufferGetSize(buffer);
     if (popSize > bufSize)
         popSize = bufSize;
-    for (uint16_t i = 0; i < popSize; i++)
-        buf[i] = bufferPop(buffer);
+    for (uint16_t i = 0; i < popSize; i++) {
+        if (buf == NULL)
+            bufferPop(buffer);
+        else
+            buf[i] = bufferPop(buffer);
+    }
     return popSize;
 }
 
@@ -99,6 +103,14 @@ uint16_t bufferGetFreeSize(const Buffer * const buffer) {
 uint16_t bufferPeekValues(const Buffer * const buffer, uint8_t **values) {
     *values = buffer->data + buffer->ptrOut;
     return buffer->size;
+}
+
+uint16_t bufferToBuffer(Buffer * const from, Buffer * const to, uint16_t size) {
+    if (size > bufferGetFreeSize(to))
+        size = bufferGetFreeSize(to);
+    uint16_t poppedSize = bufferPushValues(to, from->data + from->ptrOut, size);
+    bufferPopValues(from, NULL, poppedSize);
+    return poppedSize;
 }
 
 static void disableInt() {

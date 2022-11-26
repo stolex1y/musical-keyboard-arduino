@@ -25,7 +25,6 @@ uint16_t musicalKeyboardGetCurrentDuration();
 uint8_t musicalKeyboardGetCurrentOctave();
 uint16_t musicalKeyboardGetCurrentNote();
 const uint16_t * musicalKeyboardGetCurrentNotes();
-void musicalKeyboardPoll();
 void musicalKeyboardDebugEnable();
 void musicalKeyboardDebugDisable();
 Buffer * musicalKeyboardGetDebugBuffer();
@@ -38,7 +37,6 @@ static struct {
     void (*reduceDuration)(uint16_t deltaMs);
     void (*increaseDuration)(uint16_t deltaMs);
     void (*playCurrentOctave)();
-    void (*poll)();
     uint16_t (*currentDuration)();
     uint8_t (*currentOctave)();
     uint16_t (*currentNote)();
@@ -54,8 +52,6 @@ static struct {
         musicalKeyboardReduceDuration,
         musicalKeyboardIncreaseDuration,
         musicalKeyboardPlayCurrentOctave,
-        musicalKeyboardPoll,
-
         musicalKeyboardGetCurrentDuration,
         musicalKeyboardGetCurrentOctave,
         musicalKeyboardGetCurrentNote,

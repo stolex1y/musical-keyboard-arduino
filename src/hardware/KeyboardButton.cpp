@@ -94,7 +94,7 @@ void keyboardButtonUpdateState(KeyboardButton * const keyboardButton, uint8_t is
                 keyboardButton->state = PRESS;
                 if (keyboardButton->debugModeEnabled) {
                     char debugMsg[25];
-                    sprintf(debugMsg, "Button %" PRIu16 " is pressed\n", keyboardButton->code);
+                    sprintf(debugMsg, "Button %" PRIu16 " is pressed", keyboardButton->code);
                     buffer.pushValues(keyboardButton->buffer, (uint8_t *) debugMsg, 25);
                 }
                 if (keyboardButton->clickHandler != NULL) {
